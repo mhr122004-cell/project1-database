@@ -1,0 +1,83 @@
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: #f3f5f9;
+  color: #1f2937;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
+  background: #1e3a5f;
+  color: white;
+}
+header h1 { margin: 0; font-size: 1.4rem; }
+#signed-in-as { font-size: 0.9rem; opacity: 0.85; }
+
+main { max-width: 1150px; margin: 0 auto; padding: 24px 16px 48px; }
+
+.card {
+  background: white;
+  border-radius: 10px;
+  padding: 18px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.card h2, .card h3 { margin: 0 0 4px; }
+.card h3 { font-size: 0.95rem; color: #1e3a5f; }
+
+.card-row { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+.search-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+.search .pair + button, .search input + button, .search h3 + button { margin-top: auto; }
+
+.section-title { margin: 28px 0 12px; }
+
+label { display: flex; flex-direction: column; font-size: 0.85rem; gap: 4px; color: #4b5563; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+input {
+  padding: 8px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  min-width: 0;
+}
+input:focus { outline: 2px solid #3b82f6; border-color: transparent; }
+
+button {
+  padding: 9px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+button:hover { background: #1d4ed8; }
+button.secondary { background: #e5e7eb; color: #1f2937; }
+button.secondary:hover { background: #d1d5db; }
+
+.message { margin: 0; min-height: 1.2em; font-size: 0.9rem; }
+.message.ok { color: #15803d; }
+.message.error { color: #b91c1c; }
+
+.results { margin-top: 24px; }
+.results-head { display: flex; justify-content: space-between; align-items: center; }
+.table-wrap { overflow-x: auto; }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid #e5e7eb; }
+th { background: #f8fafc; color: #475569; }
+tbody tr:hover { background: #f8fafc; }
+.no-data { text-align: center; color: #6b7280; padding: 24px; }
+.muted { color: #9ca3af; }
+
+@media (max-width: 700px) {
+  .card-row { grid-template-columns: 1fr; }
+}

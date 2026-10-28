@@ -1,0 +1,81 @@
+-- Project 1: all SQL statements used by this project
+-- A "?" is a placeholder: the value is sent separately by the mysql2 driver
+-- (prepared/parameterized query), so user input can never change the SQL itself.
+-- This is what protects sign-in (and every other query) from SQL injection.
+
+-- ===== Setup =====
+CREATE DATABASE IF NOT EXISTS web_app;
+USE web_app;
+
+-- password holds "salt:hash" (scrypt), so it is VARCHAR(255) instead of VARCHAR(50)
+CREATE TABLE IF NOT EXISTS Users(
+   username VARCHAR(50) PRIMARY KEY,
+   password VARCHAR(255) NOT NULL,
+   firstname VARCHAR(50),
+   lastname VARCHAR(50),
+   salary FLOAT,
+   age INTEGER,
+   registerday DATE,
+   signintime DATETIME
+);
+
+-- Sample data (Backend/seed.js runs this once per user, with a hashed password)
+REPLACE INTO Users (username, password, firstname, lastname, salary, age, registerday, signintime)
+VALUES (?, ?, ?, ?, ?, ?, DATE_SUB(CURDATE(), INTERVAL ? DAY), NOW());   -- or NULL for signintime
+
+-- ===== 1. User registration =====
+INSERT INTO Users (username, password, firstname, lastname, salary, age, registerday, signintime)
+VALUES (?, ?, ?, ?, ?, ?, CURDATE(), NULL);
+
+-- ===== 2. User sign-in =====
+-- fetch the stored hash for this username; the password is checked in Node.js
+SELECT password FROM Users WHERE username = ?;
+-- on success, record the sign-in time
+UPDATE Users SET signintime = NOW() WHERE username = ?;
+
+-- ===== List all users =====
+SELECT username, firstname, lastname, salary, age, registerday, signintime
+FROM Users ORDER BY registerday, username;
+
+-- ===== 3. Search by first and/or last name =====
+-- first name only
+SELECT username, firstname, lastname, salary, age, registerday, signintime
+FROM Users WHERE firstname = ?;
+-- last name only
+SELECT username, firstname, lastname, salary, age, registerday, signintime
+FROM Users WHERE lastname = ?;
+-- both
+SELECT username, firstname, lastname, salary, age, registerday, signintime
+FROM Users WHERE firstname = ? AND lastname = ?;
+
+-- ===== 4. Search by userid =====
+SELECT username, firstname, lastname, salary, age, registerday, signintime
+FROM Users WHERE username = ?;
+
+-- ===== 5. Salary between X and Y =====
+SELECT username, firstname, lastname, salary, age, registerday, signintime
+FROM Users WHERE salary BETWEEN ? AND ? ORDER BY salary;
+
+-- ===== 6. Age between X and Y =====
+SELECT username, firstname, lastname, salary, age, registerday, signintime
+FROM Users WHERE age BETWEEN ? AND ? ORDER BY age;
+
+-- ===== 7. Users who registered after john registered =====
+SELECT username, firstname, lastname, salary, age, registerday, signintime
+FROM Users
+WHERE registerday > (SELECT registerday FROM Users WHERE username = 'john')
+ORDER BY registerday;
+
+-- ===== 8. Users who never signed in =====
+SELECT username, firstname, lastname, salary, age, registerday, signintime
+FROM Users WHERE signintime IS NULL;
+
+-- ===== 9. Users who registered on the same day as john =====
+SELECT username, firstname, lastname, salary, age, registerday, signintime
+FROM Users
+WHERE registerday = (SELECT registerday FROM Users WHERE username = 'john')
+  AND username <> 'john';
+
+-- ===== 10. Users who registered today =====
+SELECT username, firstname, lastname, salary, age, registerday, signintime
+FROM Users WHERE registerday = CURDATE();
