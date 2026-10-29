@@ -93,9 +93,7 @@ stored hash in Node.js.
 - `password` is `VARCHAR(255)` instead of `VARCHAR(50)` so it can hold the salt and hash.
 - `registerday` is a `DATE`, so "registered after john" means a later day than john's register day.
 - `signintime` is `NULL` until the user's first sign-in, which is how "never signed in" is found.
-- git fethch
-- git status
-- git pull
+- reviewed by mufliha 
 - The backend uses `mysql2` instead of `mysql` because `mysql` can't log in to MySQL 8.
 
 ## Troubleshooting
