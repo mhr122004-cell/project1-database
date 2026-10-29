@@ -1,3 +1,4 @@
+--Reviewed by Muflihs 
 -- Project 1: all SQL statements used by this project
 -- A "?" is a placeholder: the value is sent separately by the mysql2 driver
 -- (prepared/parameterized query), so user input can never change the SQL itself.
